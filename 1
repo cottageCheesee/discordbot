@@ -1,0 +1,74 @@
+
+import discord
+from sendpm import prts
+settings = {
+    'TOKEN':'OTM3MDk3NDY1MjA5OTc4ODgw.YfWyBg.IY2PW9PXEb3GT6rdrgirOD7x1cU',
+    'bot': 'Home DJ',
+    'id': 937097465209978880,
+
+}
+
+
+ban_words = []
+prefix = '::'
+client = discord.Client()
+texts = {'《🎁》『request』': '''***Request in 7vT*
+
+> 1. 13+ 
+> 2. скрин статы общая + 2, 3 сезон
+> 3. скрины с т3+
+> 4. актив с 16:00 мск
+> 5. онли планшет или 120 гц
+**
+
+||@everyone |||| @here ||''', 
+'《🎁》『request-pr-manager』': '''__**_Заявка на @7vT | PR MANAGER 
+
+1. На скольких серверах вы pm?
+2. Сколько партнерок в день?_**__
+||@everyone||''',
+'《🎁》『request-youtube』':'''__**_Анкета на роль @7vT | YouTube 
+
+1. Количество подписчиков?
+
+2. Частота выхода видеороликов.
+
+3. Вы должны оставлять бесконечную ссылку на наш сервер в описании.(я буду проверять)
+
+4. Ссылку на канал_**__
+||@everyone|| and ||@here||'''}
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    
+      
+    channel_name = message.channel.name
+    info = str(message)
+    cont = str(message.content)
+    channel = str(message.channel)
+    if 'request' in channel and cont.startswith(f'{prefix}rq'):
+      await message.channel.send(texts[channel_name])
+    if 'ban-words' in info:
+      if cont.startswith(f'{prefix}bw'):
+        ban_words.append(*(cont.split(' ')[1:]))
+      elif cont.startswith(f'{prefix}bd'):
+        if cont.split()[1] in ban_words:
+          ban_words.remove(cont.split()[1])
+      elif cont.startswith(f'{prefix}bl'):
+        await message.channel.send(ban_words)
+    if 'https:' in cont and ('al-chat' in channel or 'bot-use' in str(message.channel)):
+    
+       await message.delete()
+    if cont.startswith(f'{prefix}pm') and 'partn' in info and ('blay' in info.lower() or 'od1nok' in info.lower()):
+     
+      for i in prts():
+          await message.channel.send(i)    
+    if message.content.startswith(f'{prefix}hello'):
+        await message.channel.send('Hello!')
+
+client.run(settings['TOKEN'])
